@@ -9,6 +9,9 @@ public class Main {
         );
         Connection connection = c.getConnection();
 
+        ReservationUI frame = new ReservationUI();
+        frame.setVisible(true);
+
         /* 연결 확인을 위한 새 유저 INSERT */
 //        String SQL = "INSERT INTO PATIENT (name, ssn, phone_number, age) VALUES (?, ?, ?, ?)";
 //        try {
