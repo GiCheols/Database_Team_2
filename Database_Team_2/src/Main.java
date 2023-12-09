@@ -25,5 +25,55 @@ public class Main {
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
+
+
+        UserView user = new UserView();
+        //유저 아이디로 해당 Diagnosis 검색
+        System.out.println("유저 아이디로 진단서 검색");
+        int i = 1;
+        for (ArrayList<Object> entry : user.setDiagnosis(connection,17)) {
+            System.out.print(i+":\t");
+            for (Object value : entry) {
+                System.out.print(value + "\t");
+            }
+            System.out.println();
+            i++;
+        }
+
+        int d = (int) user.setDiagnosis(connection,17).get(0).get(0);
+        i = 1;
+        //diagnosis_id 처방 지병명 검색
+        System.out.println("유저 아이디로 병명 검색");
+
+        for (String entry : user.setDisease(connection,d)) {
+            System.out.println(i+":\t"+entry);
+            i++;
+        }
+
+        //diagnosis_id로 처방 받은 약 검색
+        System.out.println("진단서 아이디로 처방약 검색");
+        i = 1;
+        for (ArrayList<Object> entry : user.setMedicine(connection,d)) {
+            System.out.print(i+":\t");
+            for (Object value : entry) {
+                System.out.print(value + "\t");
+            }
+            System.out.println();
+            i++;
+        }
+
+        //diagnosis_id로 처방 받은 주사제 검색
+        System.out.println("진단서 아이디로 주사제 검색");
+        i = 1;
+        for (ArrayList<Object> entry : user.setInjection(connection,d)) {
+            System.out.print(i+":\t");
+            for (Object value : entry) {
+                System.out.print(value + "\t");
+            }
+            System.out.println();
+            i++;
+        }
+
+        
     }
 }
