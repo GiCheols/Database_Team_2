@@ -1,18 +1,12 @@
-<<<<<<< HEAD
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
-=======
 import DAO.ConnectionDB;
 import DAO.ReservationDAO;
 import DAO.ViewDAO;
 import response.ReservationResponse;
 import response.SelectDoctorResponse;
-
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
->>>>>>> main
+
 
 public class Main {
     public static void main(String[] args) {
