@@ -1,28 +1,45 @@
+<<<<<<< HEAD
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+=======
+import DAO.ConnectionDB;
+import DAO.ReservationDAO;
+import DAO.ViewDAO;
+import response.ReservationResponse;
+import response.SelectDoctorResponse;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> main
 
 public class Main {
     public static void main(String[] args) {
-        ConnectionDB c = new ConnectionDB(
-                "jdbc:mysql://localhost:3306/db_2?serverTimezone=Asia/Seoul&useSSL=false&useUnicode=true&characterEncoding=utf8"
-                , "root", "1234"
-        );
-        Connection connection = c.getConnection();
+        ReservationUI reservationUI = new ReservationUI();
+        reservationUI.show();
 
-        ReservationUI frame = new ReservationUI();
-        frame.setVisible(true);
-
-        /* 연결 확인을 위한 새 유저 INSERT */
-//        String SQL = "INSERT INTO PATIENT (name, ssn, phone_number, age) VALUES (?, ?, ?, ?)";
+        /** Test for Reservation Query */
+//        ReservationDAO reservationDAO = new ReservationDAO();
 //        try {
-//            PreparedStatement ps;
-//            ps = connection.prepareStatement(SQL);
-//            ps.setString(1, "test");
-//            ps.setString(2, "010331-0000000");
-//            ps.setString(3, "010-4567-1234");
-//            ps.setInt(4, 23);
-//            ps.executeUpdate();
+//            /* 시나리오 1: 부서 선택(UI) -> 의사 선택 */
+//            List<SelectDoctorResponse> doctors = reservationDAO.selectDoctor(1);
+//            for (SelectDoctorResponse r : doctors){
+//                System.out.println("Doctor ID: " + r.getDoctorId() +
+//                        ", Doctor Name: " + r.getDoctorName() +
+//                        ", Phone Number: " + r.getPhoneNumber());
+//            }
+//
+//            /* 시나리오 2: 의료진 예약 가능 시간 확인 */
+//            List<ReservationResponse> res = reservationDAO.isCanReservation(2);
+//            for (ReservationResponse r : res){
+//                System.out.println("Doctor Name: " + r.getDoctorName()
+//                + ", Schedule Time: " + r.getSchedule());
+//            }
+//
+//            /* 시나리오 3, 4: 의료진 예약 및 예약한 시간 삭제 */
+//            reservationDAO.insertReservation(2, 24, Timestamp.valueOf("2023-12-28 19:00:00"));
+//
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }

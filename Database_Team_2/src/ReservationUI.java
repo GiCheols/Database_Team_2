@@ -1,11 +1,39 @@
+import java.beans.PropertyChangeEvent;
+
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+
+import DAO.ReservationDAO;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
+import response.ReservationResponse;
+import response.SelectDoctorResponse;
 
 public class ReservationUI extends JFrame {
-    private JPanel contentPane;
+	private JPanel contentPane;
+	private int departmentNum = 10; //부서 숫자
+    private ReservationDAO dao = new ReservationDAO();
+	private int doctorNum =10; //의사숫자
+	private JTextField textField;
+	private JTextField textField_1;
+	private String hour[] = {"08", "09", "10","11","12", "14","15","16","17","18"};
+	private String min[] = {"00","30"};
+
+    private int doctorIdToReserve = 0;
+    private int patientIdToReserve = 0;
+	
     public ReservationUI(){
-        setTitle("DataBaseTeam2");
+    	setTitle("DataBaseTeam2");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 640, 505);
         contentPane = new JPanel();
@@ -13,91 +41,152 @@ public class ReservationUI extends JFrame {
 
         setContentPane(contentPane);
         contentPane.setLayout(null);
+        
+        JLabel lblNewLabel = new JLabel("1.진료과 선택");
+        lblNewLabel.setBounds(56, 27, 80, 15);
+        contentPane.add(lblNewLabel);
+        
+        JLabel lblNewLabel_1 = new JLabel("2.의료진 선택");
+        lblNewLabel_1.setBounds(206, 27, 80, 15);
+        contentPane.add(lblNewLabel_1);
+        
+        JLabel lblNewLabel_2 = new JLabel("3.예약 날짜/시간 선택");
+        lblNewLabel_2.setBounds(397, 27, 118, 15);
+        contentPane.add(lblNewLabel_2);
+        JRadioButton[] doctorBtn = new JRadioButton[doctorNum];
+        
+        JPanel selectedDepartment = new JPanel();
+        selectedDepartment.setBounds(22, 57, 144, 385);
+        contentPane.add(selectedDepartment);
+        selectedDepartment.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        ButtonGroup bg1 = new ButtonGroup();
+        JRadioButton[] departmentBtn = new JRadioButton[departmentNum];
+        
+        JPanel selectedDoctor = new JPanel();
+        selectedDoctor.setBounds(176, 59, 144, 305);
+        contentPane.add(selectedDoctor);
+        selectedDoctor.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        /*
+        JRadioButton btn1 = new JRadioButton("이비인후과");
+        btn1.setFont(new Font("굴림", Font.BOLD, 20));
+        panel.add(btn1);
+        bg1.add(btn1);
+        
+        JRadioButton btn2 = new JRadioButton("피부과");
+        btn2.setFont(new Font("굴림", Font.BOLD, 20));
+        panel.add(btn2);
+        bg1.add(btn2);
+        
+        JRadioButton btn3 = new JRadioButton("산부인과");
+        btn3.setFont(new Font("굴림", Font.BOLD, 20));
+        panel.add(btn3);
+        bg1.add(btn3);
+        */
 
-        JPanel SelectDepartment = new JPanel();
-        SelectDepartment.setBounds(10, 10, 130, 453);
-        contentPane.add(SelectDepartment);
-        SelectDepartment.setLayout(new BoxLayout(SelectDepartment, BoxLayout.Y_AXIS));
+        List<String> departments = dao.getDepartments();
+        //진료과 버튼 생성
+        for(int i = 0; i < departments.size(); i++) {
+        	departmentBtn[i] = new JRadioButton(departments.get(i));
+        	departmentBtn[i].setFont(new Font("굴림", Font.BOLD, 20));
+        	selectedDepartment.add(departmentBtn[i]);
+        	bg1.add(departmentBtn[i]);
 
-        ButtonGroup bg = new ButtonGroup();
+        	//진료과 라디오 버튼 클릭시 효과
+        	departmentBtn[i].addActionListener(e -> {
+                ButtonGroup bg2 = new ButtonGroup();
+                selectedDoctor.removeAll();
+                String s = "\"" + e.getActionCommand() + "\"";
 
-        JRadioButton Radio = new JRadioButton("이비인후과");
-        Radio.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(Radio);
-        bg.add(Radio);
-        JRadioButton Radio1 = new JRadioButton("피부과");
-        Radio1.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(Radio1);
-        bg.add(Radio1);
-        JRadioButton Radio2 = new JRadioButton("산부인과");
-        Radio2.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(Radio2);
-        bg.add(Radio2);
-        JRadioButton Radio3 = new JRadioButton("신경과");
-        Radio3.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(Radio3);
-        bg.add(Radio3);
-        JRadioButton Radio4 = new JRadioButton("성형외과");
-        Radio4.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(Radio4);
-        bg.add(Radio4);
-        JRadioButton rdbtnNewRadioButton = new JRadioButton("내과");
-        rdbtnNewRadioButton.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(rdbtnNewRadioButton);
-        bg.add(rdbtnNewRadioButton);
+                List<SelectDoctorResponse> doctors = dao.selectDoctor(dao.getDeptIdForName(s));
+                doctorNum = doctors.size();
 
-        JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("신경외과");
-        rdbtnNewRadioButton_1.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(rdbtnNewRadioButton_1);
-        bg.add(rdbtnNewRadioButton_1);
+                for(int i1 = 0; i1 < doctors.size(); i1++) {
+                    doctorBtn[i1] = new JRadioButton(doctors.get(i1).getDoctorName());
+                    doctorBtn[i1].setFont(new Font("굴림", Font.BOLD, 20));
+                    selectedDoctor.add(doctorBtn[i1]);
+                    bg2.add(doctorBtn[i1]);
 
-        JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("흉부외과");
-        rdbtnNewRadioButton_2.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(rdbtnNewRadioButton_2);
-        bg.add(rdbtnNewRadioButton_2);
+                    doctorBtn[i1].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            String name = "\"" + e.getActionCommand() + "\"";
+                            doctorIdToReserve = dao.getDoctorIdForDoctorName(name);
+                            System.out.println("doctor ID: " + doctorIdToReserve);
+                            List<ReservationResponse> reservations = dao.isCanReservation(doctorIdToReserve);
 
-        JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("비뇨기과");
-        rdbtnNewRadioButton_3.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(rdbtnNewRadioButton_3);
-        bg.add(rdbtnNewRadioButton_3);
+                            for (ReservationResponse r : reservations){
+                                System.out.println("doctor ID: " + r.getDoctorName() +
+                                        " can Reserve at " + r.getSchedule());
+                            }
+                        }
+                    });
+                }
+                repaint();
+                setVisible(true);
+            });
+        }
+        
+        UtilDateModel model = new UtilDateModel();
+        JDatePanelImpl datePanel = new JDatePanelImpl(model);
+        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
+        JPanel selectedDate = new JPanel();
+        selectedDate.setBounds(357, 57, 209, 335);
+        contentPane.add(selectedDate);
+        selectedDate.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
 
-        JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("치과");
-        rdbtnNewRadioButton_4.setFont(new Font("굴림", Font.BOLD, 20));
-        SelectDepartment.add(rdbtnNewRadioButton_4);
-        bg.add(rdbtnNewRadioButton_4);
-
-        JPanel SelectDoctor = new JPanel();
-        SelectDoctor.setBounds(144, 94, 113, 161);
-        contentPane.add(SelectDoctor);
-        SelectDoctor.setLayout(new BoxLayout(SelectDoctor, BoxLayout.Y_AXIS));
-//		JScrollPane scrollPane = new JScrollPane(SelectDoctor, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//		SelectDoctor.add(scrollPane);
-
-
-        JRadioButton rdbtnNewRadioButton_5 = new JRadioButton("New radio button");
-        SelectDoctor.add(rdbtnNewRadioButton_5);
-
-        JRadioButton rdbtnNewRadioButton_6 = new JRadioButton("New radio button");
-        SelectDoctor.add(rdbtnNewRadioButton_6);
-
-        JRadioButton rdbtnNewRadioButton_7 = new JRadioButton("New radio button");
-        SelectDoctor.add(rdbtnNewRadioButton_7);
-
-        JRadioButton rdbtnNewRadioButton_8 = new JRadioButton("New radio button");
-        SelectDoctor.add(rdbtnNewRadioButton_8);
-
-        JRadioButton rdbtnNewRadioButton_9 = new JRadioButton("New radio button");
-        SelectDoctor.add(rdbtnNewRadioButton_9);
-
-        JRadioButton rdbtnNewRadioButton_10 = new JRadioButton("New radio button");
-        SelectDoctor.add(rdbtnNewRadioButton_10);
-
-        JRadioButton rdbtnNewRadioButton_11 = new JRadioButton("New radio button");
-        SelectDoctor.add(rdbtnNewRadioButton_11);
-
-        JPanel SelectDate = new JPanel();
-        SelectDate.setBounds(262, 170, 10, 10);
-        contentPane.add(SelectDate);
+        selectedDate.add(datePicker);
+        
+        JLabel lblNewLabel_5 = new JLabel("예약시간");
+        selectedDate.add(lblNewLabel_5);
+        
+        JComboBox comboBox = new JComboBox(hour);
+        selectedDate.add(comboBox);
+        
+        JComboBox comboBox_1 = new JComboBox(min);
+        selectedDate.add(comboBox_1);
+        
+        JLabel lblNewLabel_3 = new JLabel("예약자 이름");
+        selectedDate.add(lblNewLabel_3);
+        
+        textField = new JTextField();
+        selectedDate.add(textField);
+        textField.setColumns(20);
+        
+        JLabel lblNewLabel_4 = new JLabel("연락처");
+        selectedDate.add(lblNewLabel_4);
+        
+        textField_1 = new JTextField();
+        selectedDate.add(textField_1);
+        textField_1.setColumns(20);
+        
+        JButton reservationBtn = new JButton("예약하기");
+        selectedDate.add(reservationBtn);
+        reservationBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = model.getYear() + "-" +
+                        (model.getMonth() + 1) + "-" +
+                        model.getDay() + " " +
+                        comboBox.getSelectedItem() + ":" +
+                        comboBox_1.getSelectedItem() + ":00";
+                String patientName = "\"" + textField.getText() + "\"";
+                patientIdToReserve = dao.getPatientIdForPatientName(patientName);
+                if (patientIdToReserve == 0) {
+                    JOptionPane.showMessageDialog(null,
+                            "존재하지 않는 ID입니다.",
+                            "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    if(dao.insertSchedule(doctorIdToReserve, Timestamp.valueOf(s)))
+                        dao.insertReservation(doctorIdToReserve, patientIdToReserve, Timestamp.valueOf(s));
+                }
+            }
+        });
     }
+    /*
+    public static void main(String[] args) {
+    	ReservationUI reservation = new ReservationUI();
+    	reservation.show();
+    }
+    */
 }
