@@ -44,6 +44,8 @@ public class Main {
 //            e.printStackTrace();
 //        }
 
+/*
+        Connection connection = ConnectionDB.getConnection();
 
         UserView user = new UserView();
         //유저 아이디로 해당 Diagnosis 검색
@@ -91,7 +93,7 @@ public class Main {
             System.out.println();
             i++;
         }
+*/
 
-        
     }
 }
