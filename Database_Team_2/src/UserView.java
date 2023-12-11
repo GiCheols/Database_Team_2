@@ -50,7 +50,7 @@ public class UserView {
     public ArrayList<String> setDisease(Connection c, int diagnosisid){
 
         ArrayList<Integer> column = new ArrayList<>();
-        String sqlQuery = "SELECT di.id FROM disease di JOIN diagnosis d ON di.disease_d_id = d.diagnosis_id WHERE d.diagnosis_id = ?";
+        String sqlQuery = "SELECT di.id FROM disease di JOIN diagnosis d ON di.diagnosis_id = d.diagnosis_id WHERE d.diagnosis_id = ?";
         try (PreparedStatement preparedStatement = c.prepareStatement(sqlQuery)) {
             preparedStatement.setInt(1, diagnosisid);
 

@@ -55,7 +55,6 @@ public class Main {
             System.out.println();
             i++;
         }
-
         int d = (int) user.setDiagnosis(connection,17).get(0).get(0);
         i = 1;
         //diagnosis_id 처방 지병명 검색
@@ -89,7 +88,7 @@ public class Main {
             System.out.println();
             i++;
         }
-*/
 
+*/
     }
 }

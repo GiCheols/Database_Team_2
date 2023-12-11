@@ -26,5 +26,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="json-simple-1.1.1" level="project" />
+    <orderEntry type="library" name="lombok-1.18.28" level="project" />
+    <orderEntry type="library" name="mysql-connector-j-8.2.01" level="project" />
   </component>
 </module>
