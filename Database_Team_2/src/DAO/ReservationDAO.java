@@ -77,7 +77,7 @@ public class ReservationDAO {
             preparedStatement.setTimestamp(2, scheduleTime);
             if (preparedStatement.executeUpdate() > 0) {
                 JOptionPane.showMessageDialog(null, "예약되었습니다.\n" +
-                        "예약 날짜: " + scheduleTime , "예약 실패", JOptionPane.INFORMATION_MESSAGE);
+                        "예약 날짜: " + scheduleTime , "예약 성공", JOptionPane.INFORMATION_MESSAGE);
                 return true;
             }
             return false;
