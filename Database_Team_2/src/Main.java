@@ -1,19 +1,71 @@
-import DAO.ConnectionDB;
-import DAO.ReservationDAO;
-import DAO.ViewDAO;
-import response.ReservationResponse;
-import response.SelectDoctorResponse;
+import DAO.ReadingDiagnosisDAO;
+import response.DiagnosisResponse;
+import response.InjectionResponse;
+import response.MedicineResponse;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 
 
 public class Main {
     public static void main(String[] args) {
+        int userId = 17;
+        int diagnosisIdForUserId = 0;
+        int iterator = 1;
+        ReadingDiagnosisDAO uv = new ReadingDiagnosisDAO();
+
+        System.out.println("### USER ID로 진단서 HEADER 부분 검색 ###");
+        List<DiagnosisResponse> responses = uv.getDiagnosisWithPatientId(17);
+        for (DiagnosisResponse r : responses){
+            System.out.print(iterator + ": ");
+            System.out.println("Diagnosis ID: " + r.getDiagnosisId() +
+                    ", Doctor Name: " + r.getDoctorName() +
+                    ", Patient Name: " + r.getPatientName() +
+                    ", Date: " + r.getDate());
+            // 클릭 이벤트 설정(UI 만들고 할 부분)
+            diagnosisIdForUserId = r.getDiagnosisId();
+            iterator++;
+        }
+
+        System.out.println("\n### USER ID로부터 진단서 ID 받기: " + diagnosisIdForUserId + " ###");
+
+        System.out.println("\n### 진단서 ID로 진단서 DETAIL 부분 검색 ###");
+        // 1 부분에 diagnosisIdForUserId 넣으면 됨
+        List<String> res = uv.getDiseaseForDiagnosisId(1);
+        iterator = 1;
+        for (String s : res){
+            System.out.print(iterator + ": ");
+            System.out.println("Disease Name : " + s);
+            iterator++;
+        }
+
+        List<MedicineResponse> medicines = uv.getMedicineWithDiagnosisId(1);
+        iterator = 1;
+        for (MedicineResponse r : medicines){
+            System.out.print(iterator + ": ");
+            System.out.println("Medicine Name: " + r.getMedicineName() +
+                    ", Usage Medicine: " + r.getUsageMedicine() +
+                    ", Date: " + r.getDateMedicine() +
+                    ", Daily Dosage: " + r.getDailyDosage() +
+                    ", Once Dosage: " + r.getOnceDosage() +
+                    ", Total Dosage: " + r.getTotalDosage());
+            iterator++;
+        }
         ReservationUI reservationUI = new ReservationUI();
         reservationUI.show();
+
+        List<InjectionResponse> injections = uv.getInjectionWithDiagnosisId(1);
+        iterator = 1;
+        for (InjectionResponse r : injections){
+            System.out.print(iterator + ": ");
+            System.out.println("Injection Name: " + r.getInjectionName() +
+                    ", Usage Injection: " + r.getUsageInjection() +
+                    ", Date: " + r.getDateInjection() +
+                    ", Daily Dosage: " + r.getDailyDosage() +
+                    ", Once Dosage: " + r.getOnceDosage() +
+                    ", Total Dosage: " + r.getTotalDosage());
+            iterator++;
+        }
 
         /** Test for Reservation Query */
 //        ReservationDAO reservationDAO = new ReservationDAO();
@@ -67,9 +119,10 @@ public class Main {
         }
 
         //diagnosis_id로 처방 받은 약 검색
+        Connection c = ConnectionDB.getConnection();
         System.out.println("진단서 아이디로 처방약 검색");
-        i = 1;
-        for (ArrayList<Object> entry : user.setMedicine(connection,d)) {
+        int i = 1;
+        for (ArrayList<Object> entry : uv.setMedicine(c, i)) {
             System.out.print(i+":\t");
             for (Object value : entry) {
                 System.out.print(value + "\t");
@@ -77,7 +130,6 @@ public class Main {
             System.out.println();
             i++;
         }
-
         //diagnosis_id로 처방 받은 주사제 검색
         System.out.println("진단서 아이디로 주사제 검색");
         i = 1;
