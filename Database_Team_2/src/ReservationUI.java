@@ -66,22 +66,6 @@ public class ReservationUI extends JFrame {
         selectedDoctor.setBounds(176, 59, 144, 305);
         contentPane.add(selectedDoctor);
         selectedDoctor.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-        /*
-        JRadioButton btn1 = new JRadioButton("이비인후과");
-        btn1.setFont(new Font("굴림", Font.BOLD, 20));
-        panel.add(btn1);
-        bg1.add(btn1);
-        
-        JRadioButton btn2 = new JRadioButton("피부과");
-        btn2.setFont(new Font("굴림", Font.BOLD, 20));
-        panel.add(btn2);
-        bg1.add(btn2);
-        
-        JRadioButton btn3 = new JRadioButton("산부인과");
-        btn3.setFont(new Font("굴림", Font.BOLD, 20));
-        panel.add(btn3);
-        bg1.add(btn3);
-        */
 
         List<String> departments = dao.getDepartments();
         //진료과 버튼 생성
