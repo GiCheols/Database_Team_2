@@ -117,6 +117,7 @@ public class DiagnosisUI {
         for (String s : diseases) {
             result.append("질병 명: ").append(s + "\n");
             for (MedicineResponse mr : medicines) {
+                result.append("\n처방받은 날짜: " + mr.getDateMedicine());
                 result.append("\n처방 받은 약: ").append(mr.getMedicineName());
                 result.append("\n복용 방법: ").append(mr.getUsageMedicine());
                 result.append("\n복용 횟수: 하루 ").append(mr.getDailyDosage() + "회 복용");
@@ -124,6 +125,7 @@ public class DiagnosisUI {
                 result.append(", 총 투약 수: " + mr.getTotalDosage() + "회\n");
             }
             for (InjectionResponse ir : injections) {
+                result.append("\n처방받은 날짜: " + ir.getDateInjection());
                 result.append("\n처방 받은 주사제: ").append(ir.getInjectionName());
                 result.append("\n복용 방법: ").append(ir.getUsageInjection());
                 result.append("\n복용 횟수: 하루 ").append(ir.getDailyDosage() + "회 투여");
